@@ -4,39 +4,49 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
   <meta name="theme-color" content="#0A3D91">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="ACADOMAX">
   <title>ACADOMAX</title>
-  
-  <!-- Lien vers le manifeste -->
+
   <link rel="manifest" href="./manifest.json">
-  
-  <!-- Icône pour iOS -->
-  <link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgcng9Ijk2IiBmaWxsPSIjMEEzRDkxIi8+PHRleHQgeD0iNTAlIiB5PSI1MyUiIGRvbWluYW50LWJhc2VsaW5lPSJjZW50cmFsIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwsc2Fucy1zZXJpZiIgZm9udC13ZWlnaHQ9ImJvbGQiIGZvbnQtc2l6ZT0iMzMwIiBmaWxsPSIjZmZmZmZmIj5BPC90ZXh0Pjwvc3ZnPg==">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://ui-avatars.com/api/?name=A&background=0A3D91&color=fff&size=192&format=png&bold=true">
+  <link rel="apple-touch-icon" href="https://ui-avatars.com/api/?name=A&background=0A3D91&color=fff&size=192&format=png&bold=true">
 
   <style>
     body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; background: #f7f6f2; }
     iframe { width: 100%; height: 100%; border: none; display: block; }
-    #loader { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: #f7f6f2; color: #0A3D91; font-family: sans-serif; font-weight: bold; font-size: 24px; z-index: 10; transition: opacity 0.3s; }
+    #loader {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: #f7f6f2; color: #0A3D91;
+      font-family: sans-serif; font-weight: bold; font-size: 24px;
+      z-index: 10; transition: opacity 0.3s;
+    }
   </style>
 </head>
 <body>
   <div id="loader">Chargement d'ACADOMAX...</div>
 
   <!-- ⚠️ REMPLACEZ L'URL CI-DESSOUS PAR VOTRE LIEN /exec ACTUEL -->
-  <iframe id="app" src="https://script.google.com/macros/s/AKfycbwU63DmsqfEAmMkg3m11pR9v5EA3zLWIWJ5N8LmBTk-B0mA4y0ZCD2JTbVJ0skCuzXY/exec" allow="clipboard-read; clipboard-write"></iframe>
+  <iframe id="app"
+          src="https://script.google.com/macros/s/AKfycbxAhyo5ACArrMIJ3BtwSdOewSQQgMLE6OGz1b_JqZp1YUvWp8N3HF21xz8AC_t7QyY/exec"
+          allow="clipboard-read; clipboard-write">
+  </iframe>
 
   <script>
-    // Masquer le chargement une fois l'application prête
     document.getElementById('app').onload = function() {
-      document.getElementById('loader').style.opacity = '0';
-      setTimeout(() => document.getElementById('loader').style.display = 'none', 300);
+      var loader = document.getElementById('loader');
+      loader.style.opacity = '0';
+      setTimeout(function() { loader.style.display = 'none'; }, 300);
     };
 
-    // Enregistrement du Service Worker (OBLIGATOIRE pour l'installation Android)
     if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
+      window.addEventListener('load', function() {
         navigator.serviceWorker.register('./service-worker.js')
-          .then(reg => console.log('Service Worker enregistré avec succès.', reg))
-          .catch(err => console.error('Erreur Service Worker :', err));
+          .then(function(reg) { console.log('Service Worker OK :', reg.scope); })
+          .catch(function(err) { console.error('Service Worker ERREUR :', err); });
       });
     }
   </script>
