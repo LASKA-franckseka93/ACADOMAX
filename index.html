@@ -2,35 +2,43 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <meta name="theme-color" content="#0A3D91">
   <title>ACADOMAX</title>
   
-  <script>
-    (function() {
-      // ⚠️ METTEZ VOTRE UNIQUE LIEN /exec ICI (le même pour les deux)
-      var GAS_URL = "https://script.google.com/macros/s/AKfycbwSeYudYl-QDm3Wsnepv6ewos79RoBl5Js1z4RpC-s7oawtkE3SQmZhf4F_wtONy4kM/exec";
-      
-      var isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
-
-      if (isMobile) {
-        if ('serviceWorker' in navigator) {
-          navigator.serviceWorker.getRegistrations().then(function(registrations) {
-            for(let registration of registrations) { registration.unregister(); }
-          });
-        }
-        window.location.replace(GAS_URL);
-      }
-    })();
-  </script>
+  <!-- Lien vers le manifeste -->
+  <link rel="manifest" href="./manifest.json">
   
+  <!-- Icône pour iOS -->
+  <link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgcng9Ijk2IiBmaWxsPSIjMEEzRDkxIi8+PHRleHQgeD0iNTAlIiB5PSI1MyUiIGRvbWluYW50LWJhc2VsaW5lPSJjZW50cmFsIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwsc2Fucy1zZXJpZiIgZm9udC13ZWlnaHQ9ImJvbGQiIGZvbnQtc2l6ZT0iMzMwIiBmaWxsPSIjZmZmZmZmIj5BPC90ZXh0Pjwvc3ZnPg==">
+
   <style>
-    body { margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; font-family: sans-serif; background: #f7f6f2; color: #0A3D91; }
-    .spinner { width: 40px; height: 40px; border: 4px solid #ced9e9; border-top: 4px solid #0A3D91; border-radius: 50%; animation: spin 1s linear infinite; margin: auto; }
-    @keyframes spin { 100% { transform: rotate(360deg); } }
+    body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; background: #f7f6f2; }
+    iframe { width: 100%; height: 100%; border: none; display: block; }
+    #loader { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: #f7f6f2; color: #0A3D91; font-family: sans-serif; font-weight: bold; font-size: 24px; z-index: 10; transition: opacity 0.3s; }
   </style>
 </head>
 <body>
-  <!-- L'iframe utilise la MÊME URL -->
-  <iframe id="app" src="https://script.google.com/macros/s/AKfycbwSeYudYl-QDm3Wsnepv6ewos79RoBl5Js1z4RpC-s7oawtkE3SQmZhf4F_wtONy4kM/exec" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;" allow="clipboard-read; clipboard-write"></iframe>
+  <div id="loader">Chargement d'ACADOMAX...</div>
+
+  <!-- ⚠️ REMPLACEZ L'URL CI-DESSOUS PAR VOTRE LIEN /exec ACTUEL -->
+  <iframe id="app" src="https://script.google.com/macros/s/AKfycbwU63DmsqfEAmMkg3m11pR9v5EA3zLWIWJ5N8LmBTk-B0mA4y0ZCD2JTbVJ0skCuzXY/exec" allow="clipboard-read; clipboard-write"></iframe>
+
+  <script>
+    // Masquer le chargement une fois l'application prête
+    document.getElementById('app').onload = function() {
+      document.getElementById('loader').style.opacity = '0';
+      setTimeout(() => document.getElementById('loader').style.display = 'none', 300);
+    };
+
+    // Enregistrement du Service Worker (OBLIGATOIRE pour l'installation Android)
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./service-worker.js')
+          .then(reg => console.log('Service Worker enregistré avec succès.', reg))
+          .catch(err => console.error('Erreur Service Worker :', err));
+      });
+    }
+  </script>
 </body>
 </html>
