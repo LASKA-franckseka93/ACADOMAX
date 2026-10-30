@@ -7,18 +7,17 @@
   
   <script>
     (function() {
-      var isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+      // ⚠️ METTEZ VOTRE UNIQUE LIEN /exec ICI (le même pour les deux)
       var GAS_URL = "https://script.google.com/macros/s/AKfycbwSeYudYl-QDm3Wsnepv6ewos79RoBl5Js1z4RpC-s7oawtkE3SQmZhf4F_wtONy4kM/exec";
+      
+      var isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
 
       if (isMobile) {
-        // 1. On tue le Service Worker pour effacer le cache de l'ancienne PWA
         if ('serviceWorker' in navigator) {
           navigator.serviceWorker.getRegistrations().then(function(registrations) {
             for(let registration of registrations) { registration.unregister(); }
           });
         }
-        
-        // 2. On redirige immédiatement vers Apps Script (plein écran, sans iframe)
         window.location.replace(GAS_URL);
       }
     })();
@@ -26,15 +25,12 @@
   
   <style>
     body { margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; font-family: sans-serif; background: #f7f6f2; color: #0A3D91; }
-    /* Ce loader ne s'affichera que sur ordinateur pendant le chargement de l'iframe */
     .spinner { width: 40px; height: 40px; border: 4px solid #ced9e9; border-top: 4px solid #0A3D91; border-radius: 50%; animation: spin 1s linear infinite; margin: auto; }
     @keyframes spin { 100% { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
-
-  <!-- Sur ordinateur, l'application se charge normalement dans l'iframe -->
+  <!-- L'iframe utilise la MÊME URL -->
   <iframe id="app" src="https://script.google.com/macros/s/AKfycbxAhyo5ACArrMIJ3BtwSdOewSQQgMLE6OGz1b_JqZp1YUvWp8N3HF21xz8AC_t7QyY/exec" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;" allow="clipboard-read; clipboard-write"></iframe>
-
 </body>
 </html>
