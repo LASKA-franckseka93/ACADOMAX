@@ -4,18 +4,26 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#0A3D91">
-  <meta name="description" content="ACADOMAX — Suivi des cours à domicile">
   <title>ACADOMAX</title>
+
+  <script>
+    // ⚠️ Détection mobile → redirection directe vers GAS (contourne le blocage des cookies dans iframe)
+    (function () {
+      var ua = navigator.userAgent || "";
+      var isMobile = /Android|iPhone|iPad|iPod|Mobile|Opera Mini|IEMobile/i.test(ua);
+      if (isMobile) {
+        // Redirection immédiate vers l'app GAS (pas d'iframe sur mobile)
+        window.location.replace("https://script.google.com/macros/s/AKfycbxAhyo5ACArrMIJ3BtwSdOewSQQgMLE6OGz1b_JqZp1YUvWp8N3HF21xz8AC_t7QyY/exec");
+      }
+    })();
+  </script>
 
   <link rel="manifest" href="./manifest.json">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='96' fill='%230A3D91'/%3E%3Ctext x='50%25' y='53%25' dominant-baseline='central' text-anchor='middle' font-family='Arial' font-weight='bold' font-size='330' fill='white'%3EA%3C/text%3E%3C/svg%3E">
   <link rel="apple-touch-icon" href="https://placehold.co/192x192/0A3D91/FFFFFF/png?text=A&font=roboto">
-
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="ACADOMAX">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="application-name" content="ACADOMAX">
 
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -37,20 +45,6 @@
     @keyframes spin { to { transform: rotate(360deg); } }
     #loader strong { font-size: 22px; letter-spacing: .5px; font-weight: 800; }
     #loader small { color: #6e7888; font-size: 12px; }
-    #offline {
-      position: absolute; inset: 0; z-index: 20; display: none;
-      flex-direction: column; align-items: center; justify-content: center;
-      padding: 24px; text-align: center; background: #f7f6f2; color: #202837;
-      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-    }
-    #offline.visible { display: flex; }
-    #offline h2 { margin-bottom: 12px; }
-    #offline p { color: #6e7888; margin-bottom: 20px; }
-    #offline button {
-      padding: 12px 24px; border: 0; border-radius: 9px;
-      background: #0A3D91; color: #fff; font-weight: 700;
-      font-size: 14px; cursor: pointer;
-    }
   </style>
 </head>
 <body>
@@ -60,47 +54,22 @@
     <small>Chargement de votre espace…</small>
   </div>
 
-  <div id="offline">
-    <h2>Pas de connexion</h2>
-    <p>Vérifiez votre connexion internet puis réessayez.</p>
-    <button onclick="location.reload()">Réessayer</button>
-  </div>
-
-  <!-- ⚠️ REMPLACEZ l'URL ci-dessous par votre URL GAS /exec -->
+  <!-- Desktop uniquement : iframe -->
   <iframe id="app"
-          src="https://script.google.com/macros/s/AKfycbwSeYudYl-QDm3Wsnepv6ewos79RoBl5Js1z4RpC-s7oawtkE3SQmZhf4F_wtONy4kM/exec"
-          allow="clipboard-read; clipboard-write"
+          src="https://script.google.com/macros/s/AKfycbxAhyo5ACArrMIJ3BtwSdOewSQQgMLE6OGz1b_JqZp1YUvWp8N3HF21xz8AC_t7QyY/exec"
           title="ACADOMAX"
+          allow="clipboard-read; clipboard-write"
           referrerpolicy="no-referrer-when-downgrade"></iframe>
 
   <script>
-    // Service worker : active le mode installable + cache de la coquille
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('./service-worker.js').catch(e => console.warn('SW:', e));
       });
     }
-
     const iframe = document.getElementById('app');
     const loader = document.getElementById('loader');
-    const offline = document.getElementById('offline');
-    let loaded = false;
-
-    iframe.addEventListener('load', () => {
-      loaded = true;
-      loader.classList.add('hidden');
-    });
-
-    // Si l'iframe ne charge pas en 20s → message hors ligne
-    setTimeout(() => {
-      if (!loaded) offline.classList.add('visible');
-    }, 20000);
-
-    window.addEventListener('offline', () => offline.classList.add('visible'));
-    window.addEventListener('online', () => {
-      offline.classList.remove('visible');
-      if (!loaded) iframe.src = iframe.src;
-    });
+    iframe.addEventListener('load', () => loader.classList.add('hidden'));
   </script>
 </body>
 </html>
